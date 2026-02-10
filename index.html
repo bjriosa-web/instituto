@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instituto Von Humboldt - Plataforma Estudiantil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <style>
+        :root {
+            --primary-purple: #6a1b9a;
+            --primary-purple-light: #8e24aa;
+            --primary-purple-dark: #4a148c;
+            --primary-orange: #f57c00;
+            --primary-orange-light: #ff9800;
+            --primary-orange-dark: #ef6c00;
+            --light-purple: #f3e5f5;
+            --gradient-purple: linear-gradient(135deg, #7b1fa2, #4a148c);
+            --gradient-orange: linear-gradient(135deg, #ff9800, #ef6c00);
+            --gradient-purple-orange: linear-gradient(135deg, #7b1fa2, #ff9800);
+            --text-dark: #4a4a4a;
+            --white: #ffffff;
+            --gray-light: #f5f5f5;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fcfaff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- Textura de Ondas Superior e Inferior --- */
+        .wave-top, .wave-bottom {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .wave-top {
+            top: 0;
+            height: 400px;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(123, 31, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 10%, rgba(255, 152, 0, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, rgba(123, 31, 162, 0.1) 0%, transparent 60%);
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+        }
+
+        .wave-bottom {
+            bottom: 0;
+            height: 300px;
+            background: 
+                radial-gradient(circle at 10% 90%, rgba(255, 152, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 70%, rgba(123, 31, 162, 0.08) 0%, transparent 50%),
+                linear-gradient(0deg, rgba(255, 152, 0, 0.08) 0%, transparent 70%);
+            clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
+        }
+
+        /* Ajuste de lectura */
+        .main-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- Encabezado Institucional Mejorado --- */
+        .institutional-header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 229, 245, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            box-shadow: 0 5px 20px rgba(106, 27, 154, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-logo-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #7b1fa2, #ff9800);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(123, 31, 162, 0.3);
+            border: 3px solid white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-logo-circle::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #ff9800, #7b1fa2, #4a148c);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .header-logo-img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .institute-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .institute-main-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .institute-subtitle {
+            font-size: 0.9rem;
+            color: var(--primary-orange);
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        .header-contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: right;
+        }
+
+        .header-contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            color: var(--primary-purple);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .header-contact-item i {
+            color: var(--primary-orange);
+            font-size: 1rem;
+        }
+
+        /* --- Contenedor Principal con Logo Sobrepuesto --- */
+        .main-container {
+            max-width: 1000px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-overlay-container {
+            position: relative;
+            margin-bottom: 60px;
+        }
+
+        /* MARCO CIRCULAR DEL LOGO - VERSIÓN SIMPLIFICADA Y COMPATIBLE */
+        .logo-overlay-circle {
+            position: absolute;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #fff, #f5f5f5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.2),
+                inset 0 5px 15px rgba(255, 255, 255, 0.8);
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        /* Marco circular con gradiente - Versión compatible */
+        .logo-overlay-circle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            padding: 8px;
+            background: linear-gradient(135deg, 
+                #ff9800 0%, 
+                #ff9800 33%, 
+                #7b1fa2 33%, 
+                #7b1fa2 66%, 
+                #e0e0e0 66%, 
+                #e0e0e0 100%);
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+        }
+
+        /* Marco circular alternativo usando border-image */
+        .logo-border-frame {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #ff9800,
+                #ff9800 120deg,
+                #7b1fa2 120deg,
+                #7b1fa2 240deg,
+                #e0e0e0 240deg,
+                #e0e0e0 360deg
+            );
+            padding: 3px;
+            z-index: -1;
+        }
+
+        /* Efecto de brillo */
+        .logo-overlay-circle::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            background: linear-gradient(45deg, 
+                rgba(255, 152, 0, 0.3), 
+                rgba(123, 31, 162, 0.3), 
+                rgba(74, 20, 140, 0.3), 
+                rgba(255, 152, 0, 0.3));
+            border-radius: 50%;
+            z-index: -2;
+            filter: blur(12px);
+            opacity: 0.6;
+        }
+
+        .logo-overlay-img {
+            width: 78%;
+            height: 78%;
+            object-fit: contain;
+            border-radius: 50%;
+            position: relative;
+            z-index: 1;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 
+                inset 0 2px 10px rgba(0, 0, 0, 0.1),
+                0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Efecto de brillo interno - alternativa más compatible */
+        .logo-inner-glow {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(
+                ellipse at 30% 30%,
+                rgba(255, 255, 255, 0.8) 0%,
+                rgba(255, 255, 255, 0.4) 30%,
+                transparent 70%
+            );
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        /* --- Sección Login Mejorada --- */
+        .login-section {
+            padding: 120px 40px 60px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .login-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-purple));
+        }
+
+        .title {
+            color: var(--primary-purple);
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-orange-light), var(--primary-orange-dark));
+            color: var(--white);
+            border: none;
+            padding: 20px 90px;
+            font-size: 1.4rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(245, 124, 0, 0.4);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 12px 30px rgba(245, 124, 0, 0.6);
+        }
+
+        .btn-primary i {
+            margin-left: 10px;
+            font-size: 0.9em;
+            transition: transform 0.3s;
+        }
+
+        .btn-primary:hover i {
+            transform: translateX(8px);
+        }
+
+        /* --- Carrusel de Banner MEJORADO --- */
+        .banner-section {
+            margin: 60px 0;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+            height: 500px; /* Aumentado de 400px */
+        }
+
+        .swiper {
+            width: 100%;
+            height: 100%;
+            border-radius: 25px;
+        }
+
+        .swiper-slide {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .slide-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Cambiado a contain para ver imágenes completas */
+            object-position: center;
+            border-radius: 25px;
+        }
+
+        /* Controles de navegación */
+        .swiper-button-next, .swiper-button-prev {
+            background-color: rgba(255, 255, 255, 0.8);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+        }
+
+        .swiper-button-next::after, .swiper-button-prev::after {
+            font-size: 1.5rem;
+            color: var(--primary-purple);
+            font-weight: bold;
+        }
+
+        .swiper-button-next:hover, .swiper-button-prev:hover {
+            background-color: var(--white);
+            transform: scale(1.1);
+        }
+
+        .swiper-pagination {
+            bottom: 20px !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: var(--white);
+            opacity: 0.7;
+            width: 14px;
+            height: 14px;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--primary-orange);
+            opacity: 1;
+        }
+
+        /* --- Sección Carreras --- */
+        .careers-section {
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .section-title {
+            color: var(--primary-purple);
+            font-size: 2.3rem;
+            margin-bottom: 40px;
+            font-weight: 800;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-purple));
+            border-radius: 3px;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 300px;
+            max-width: 380px;
+            display: flex;
+            align-items: center;
+            padding: 30px;
+            border-radius: 25px;
+            color: white;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            z-index: -1;
+            transition: transform 0.6s ease;
+        }
+
+        .card:hover::before {
+            transform: scale(1.08);
+        }
+
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .card-purple { background: linear-gradient(135deg, var(--primary-purple-light), var(--primary-purple-dark)); }
+        .card-orange { background: linear-gradient(135deg, var(--primary-orange-light), var(--primary-orange-dark)); }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-right: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .card:hover .card-icon {
+            transform: rotate(20deg) scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .card-label {
+            display: block;
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .card-career {
+            font-size: 1.8rem;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- Footer Mejorado --- */
+        .footer-section {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 229, 245, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            margin-top: 40px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex: 1;
+            min-width: 280px;
+            padding: 15px;
+            border-radius: 15px;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-light);
+        }
+
+        .contact-item i {
+            color: var(--primary-purple);
+            font-size: 1.3rem;
+            width: 35px;
+            text-align: center;
+            margin-top: 3px;
+        }
+
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+            font-size: 2.2rem;
+        }
+
+        .social-media a {
+            color: var(--primary-purple);
+            transition: var(--transition);
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: var(--shadow-light);
+        }
+
+        .social-media a:hover {
+            color: var(--white);
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-orange));
+            transform: translateY(-8px) scale(1.1);
+        }
+
+        .copyright {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #777;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(106, 27, 154, 0.1);
+        }
+
+        /* =========================================
+           RESPONSIVE DESIGN
+           ========================================= */
+        @media (max-width: 1024px) {
+            .banner-section {
+                height: 450px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wave-top {
+                height: 250px;
+            }
+            
+            .wave-bottom {
+                height: 200px;
+            }
+            
+            .banner-section {
+                height: 400px;
+                margin: 40px 0;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .header-contact-info {
+                text-align: center;
+            }
+            
+            .header-contact-item {
+                justify-content: center;
+            }
+            
+            .logo-overlay-circle {
+                width: 180px;
+                height: 180px;
+                top: -90px;
+            }
+            
+            .institute-main-title {
+                font-size: 1.5rem;
+            }
+            
+            .main-container {
+                margin-top: 80px;
+            }
+            
+            .login-section {
+                padding: 100px 25px 50px;
+            }
+            
+            .title {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .btn-primary {
+                padding: 18px 60px;
+                font-size: 1.2rem;
+            }
+            
+            .swiper-button-next, .swiper-button-prev {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .swiper-button-next::after, .swiper-button-prev::after {
+                font-size: 1.2rem;
+            }
+            
+            .card {
+                min-width: 100%;
+            }
+            
+            .contact-item {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .banner-section {
+                height: 300px;
+                border-radius: 15px;
+            }
+            
+            .swiper {
+                border-radius: 15px;
+            }
+            
+            .slide-img {
+                border-radius: 15px;
+            }
+            
+            .header-logo-circle {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .logo-overlay-circle {
+                width: 160px;
+                height: 160px;
+                top: -80px;
+            }
+            
+            .title {
+                font-size: 1.9rem;
+            }
+            
+            .btn-primary {
+                padding: 16px 40px;
+                font-size: 1.1rem;
+            }
+            
+            .swiper-button-next, .swiper-button-prev {
+                display: none; /* Ocultar flechas en móviles muy pequeños */
+            }
+            
+            .section-title {
+                font-size: 1.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wave-top"></div>
+    <div class="wave-bottom"></div>
+
+    <!-- Contenido Principal con Logo Sobrepuesto -->
+    <div class="main-container">
+        <div class="logo-overlay-container">
+            <div class="logo-overlay-circle">
+                <div class="logo-inner-glow"></div>
+                <img src="logo.1.png" alt="Logo Instituto Von Humboldt" class="logo-overlay-img">
+            </div>
+            
+            <main class="login-section">
+                <h1 class="title">Accede al Sistema</h1>
+                <p class="subtitle">Plataforma exclusiva para nuestros estudiantes. Ingresa con tus credenciales para acceder a materiales, calificaciones y más.</p>
+                
+                <button class="btn-primary" id="accederBtn">
+                    Acceder <i class="fas fa-chevron-right"></i>
+                </button>
+            </main>
+        </div>
+
+        <!-- Carrusel de Banner MEJORADO -->
+        <section class="banner-section">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="baner1.png" alt="Excelencia Educativa - Instituto Von Humboldt" class="slide-img">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="baner2.png" alt="Infraestructura Moderna - Instituto Von Humboldt" class="slide-img">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="baner3.png" alt="Docentes Especializados - Instituto Von Humboldt" class="slide-img">
+                    </div>
+                </div>
+                <!-- Controles de navegación -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <!-- Paginación -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <!-- Sección Carreras -->
+        <section class="careers-section">
+            <h2 class="section-title">Carreras Técnicas</h2>
+            
+            <div class="cards-container">
+                <div class="card card-purple" id="enfermeriaCard">
+                    <div class="card-icon">
+                        <i class="fas fa-user-nurse"></i>
+                    </div>
+                    <div class="card-info">
+                        <span class="card-label">Técnico en</span>
+                        <h3 class="card-career">Enfermería</h3>
+                    </div>
+                </div>
+
+                <div class="card card-orange" id="contabilidadCard">
+                    <div class="card-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="card-info">
+                        <span class="card-label">Técnico en</span>
+                        <h3 class="card-career">Contabilidad</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer-section">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Túpac Yupanqui #273, Frente a la Plazuela Pinillos | Trujillo</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+044-3455333 / +51 987 654321</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>info@vonhumboldt.edu.pe</span>
+                </div>
+            </div>
+            
+            <div class="social-media">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            
+            <p class="copyright">© 2023 Instituto Von Humboldt. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar el carrusel MEJORADO
+            const swiper = new Swiper('.swiper', {
+                direction: 'horizontal',
+                loop: true,
+                autoplay: {
+                    delay: 5000, // Cambia cada 5 segundos
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true, // Pausa cuando el mouse está sobre el carrusel
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    dynamicBullets: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                effect: 'slide', // Cambiado a 'slide' para mejor navegación
+                speed: 800,
+                grabCursor: true, // Cambia el cursor cuando se puede arrastrar
+                spaceBetween: 0, // Sin espacio entre slides
+                centeredSlides: true, // Centra el slide activo
+                slidesPerView: 1, // Muestra un slide a la vez
+            });
+            
+            // Referencias a los elementos
+            const btnAcceder = document.getElementById('accederBtn');
+            const cards = document.querySelectorAll('.card');
+
+            // 1. Efecto al hacer clic en "Acceder"
+            btnAcceder.addEventListener('click', () => {
+                // Animación mejorada
+                btnAcceder.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Accediendo...';
+                btnAcceder.disabled = true;
+                btnAcceder.style.opacity = '0.8';
+                
+                // Simular proceso de login
+                setTimeout(() => {
+                    // Crear modal de éxito
+                    const modal = document.createElement('div');
+                    modal.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0,0,0,0.85);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 10000;
+                        animation: fadeIn 0.4s ease;
+                    `;
+                    
+                    modal.innerHTML = `
+                        <div style="background: linear-gradient(135deg, #fff, #f9f5ff); padding: 50px; border-radius: 25px; text-align: center; max-width: 550px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.6); position: relative;">
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, #ff9800, #7b1fa2); border-radius: 25px 25px 0 0;"></div>
+                            <i class="fas fa-check-circle" style="font-size: 5rem; background: linear-gradient(135deg, #4CAF50, #2E7D32); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px;"></i>
+                            <h2 style="color: #4a148c; margin-bottom: 20px; font-size: 2.2rem; font-weight: 800;">¡Acceso Exitoso!</h2>
+                            <p style="margin-bottom: 35px; font-size: 1.2rem; color: #555; line-height: 1.5;">Bienvenido a la plataforma estudiantil del Instituto Von Humboldt</p>
+                            <button id="closeModal" style="background: linear-gradient(135deg, #f57c00, #ff9800); color: white; border: none; padding: 16px 40px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; font-weight: bold; box-shadow: 0 8px 20px rgba(245, 124, 0, 0.4); transition: all 0.3s;">
+                                Continuar
+                            </button>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(modal);
+                    
+                    // Cerrar modal
+                    const closeModalBtn = document.getElementById('closeModal');
+                    closeModalBtn.addEventListener('click', () => {
+                        document.body.removeChild(modal);
+                        btnAcceder.innerHTML = 'Acceder <i class="fas fa-chevron-right"></i>';
+                        btnAcceder.disabled = false;
+                        btnAcceder.style.opacity = '1';
+                    });
+                    
+                    // Cerrar modal haciendo clic fuera
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            document.body.removeChild(modal);
+                            btnAcceder.innerHTML = 'Acceder <i class="fas fa-chevron-right"></i>';
+                            btnAcceder.disabled = false;
+                            btnAcceder.style.opacity = '1';
+                        }
+                    });
+                }, 1800);
+            });
+
+            // 2. Efectos para las tarjetas de carreras
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = "translateY(-12px)";
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = "translateY(0)";
+                });
+                
+                card.addEventListener('click', () => {
+                    const carrera = card.querySelector('.card-career').innerText;
+                    
+                    // Efecto visual al hacer clic
+                    card.style.transform = "scale(0.95)";
+                    setTimeout(() => {
+                        card.style.transform = "scale(1)";
+                    }, 200);
+                    
+                    // Mostrar información de la carrera
+                    const modalInfo = document.createElement('div');
+                    modalInfo.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0,0,0,0.85);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 10000;
+                        animation: fadeIn 0.4s ease;
+                    `;
+                    
+                    let carreraInfo = '';
+                    let duracion = '';
+                    
+                    if (carrera === 'Enfermería') {
+                        carreraInfo = 'Formación técnica especializada en cuidados de salud, primeros auxilios, enfermería general y atención al paciente.';
+                        duracion = '3 años';
+                    } else if (carrera === 'Contabilidad') {
+                        carreraInfo = 'Formación en gestión contable, tributación, costos y finanzas empresariales.';
+                        duracion = '3 años';
+                    }
+                    
+                    modalInfo.innerHTML = `
+                        <div style="background: linear-gradient(135deg, #fff, #f9f5ff); padding: 50px; border-radius: 25px; text-align: center; max-width: 650px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.6); position: relative;">
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(90deg, #7b1fa2, #ff9800); border-radius: 25px 25px 0 0;"></div>
+                            <h2 style="color: #4a148c; margin-bottom: 25px; font-size: 2.2rem; font-weight: 800;">Técnico en ${carrera}</h2>
+                            <p style="margin-bottom: 25px; font-size: 1.2rem; color: #555; line-height: 1.6;">${carreraInfo}</p>
+                            
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 30px; background: #f3e5f5; padding: 20px; border-radius: 15px;">
+                                <div style="text-align: center; flex: 1;">
+                                    <i class="fas fa-clock" style="font-size: 2rem; color: #7b1fa2; margin-bottom: 10px;"></i>
+                                    <h4 style="color: #7b1fa2; margin-bottom: 5px;">Duración</h4>
+                                    <p style="font-weight: 600; color: #555;">${duracion}</p>
+                                </div>
+                                <div style="text-align: center; flex: 1;">
+                                    <i class="fas fa-graduation-cap" style="font-size: 2rem; color: #7b1fa2; margin-bottom: 10px;"></i>
+                                    <h4 style="color: #7b1fa2; margin-bottom: 5px;">Modalidad</h4>
+                                    <p style="font-weight: 600; color: #555;">Presencial</p>
+                                </div>
+                            </div>
+                            
+                            <div style="background: #f3e5f5; padding: 25px; border-radius: 15px; margin-bottom: 30px; text-align: left;">
+                                <h4 style="color: #7b1fa2; margin-bottom: 15px; font-size: 1.3rem;">Información de Contacto:</h4>
+                                <p style="margin-bottom: 10px; font-size: 1.1rem;"><i class="fas fa-phone-alt" style="color: #ff9800; margin-right: 10px;"></i> +044-3455333 / +51 987 654321</p>
+                                <p style="font-size: 1.1rem;"><i class="fas fa-envelope" style="color: #ff9800; margin-right: 10px;"></i> admision@vonhumboldt.edu.pe</p>
+                            </div>
+                            
+                            <button id="closeInfoModal" style="background: linear-gradient(135deg, #7b1fa2, #4a148c); color: white; border: none; padding: 16px 40px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; font-weight: bold; box-shadow: 0 8px 20px rgba(123, 31, 162, 0.4); transition: all 0.3s;">
+                                Cerrar
+                            </button>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(modalInfo);
+                    
+                    // Cerrar modal de información
+                    const closeInfoModalBtn = document.getElementById('closeInfoModal');
+                    closeInfoModalBtn.addEventListener('click', () => {
+                        document.body.removeChild(modalInfo);
+                    });
+                    
+                    // Cerrar modal haciendo clic fuera
+                    modalInfo.addEventListener('click', (e) => {
+                        if (e.target === modalInfo) {
+                            document.body.removeChild(modalInfo);
+                        }
+                    });
+                });
+            });
+
+            // 3. Efecto de aparición para elementos al hacer scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = `fadeInUp 0.8s ease forwards`;
+                        entry.target.style.opacity = '0';
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                        }, 100);
+                    }
+                });
+            }, observerOptions);
+
+            // Observar elementos para animación
+            document.querySelectorAll('.login-section, .banner-section, .careers-section, .card, .footer-section').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Agregar estilos de animación
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(40px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
